@@ -15,8 +15,8 @@ const localProcessedVideoPath = "./processed-videos";
  */
 
 export function setUpDirectories() {
-    // ensureDirectoryExistences(localRawVideoPath);
-    // ensureDirectoryExistences([localProcessedVideoPath);
+     ensureDirectoryExistences(localRawVideoPath);
+     ensureDirectoryExistences(localProcessedVideoPath);
 }
 
 /**
@@ -122,5 +122,12 @@ export async function uploadProcessedVideo(fileName: string) {
                 resolve();
             }
         })
+    }
+}
+
+function ensureDirectoryExistences(dirPath: string) {
+    if(!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true});
+        console.log(`Directory created at ${dirPath}`);
     }
 }
