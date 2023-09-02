@@ -52,7 +52,6 @@ export async function downloadRawVideo(fileName: string) {
    await storage.bucket(rawVideoBucketName)
     .file(fileName)
     .download({destination: `${localRawVideoPath}/${fileName}`});
-
     console.log(
         `gs://${rawVideoBucketName}/${fileName} download to ${localRawVideoPath}/${fileName}.`
     )
@@ -68,7 +67,9 @@ export async function downloadRawVideo(fileName: string) {
 export async function uploadProcessedVideo(fileName: string) { 
     const bucket = storage.bucket(processedVideoBucketName);
 
-   await bucket.upload(`${localProcessedVideoPath}/${fileName}`, {
+    //Upload video to the bucket 
+   await storage.bucket(processedVideoBucketName)
+        .upload(`${localProcessedVideoPath}/${fileName}`, {
         destination: fileName
     });
 
@@ -76,8 +77,9 @@ export async function uploadProcessedVideo(fileName: string) {
         `${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}`
     );
 
+    // Set the video to be publicly readable 
     await bucket.file(fileName).makePublic();
-
+    }
 
     /** 
      * @param fileName - the file name of the file to delete from the 
@@ -123,7 +125,6 @@ export async function uploadProcessedVideo(fileName: string) {
             }
         })
     }
-}
 
 function ensureDirectoryExistences(dirPath: string) {
     if(!fs.existsSync(dirPath)) {
